@@ -1,6 +1,8 @@
 import json
+import os
 
 def grabRunInstanceInfo(fileName):
+	'filter out useful informations from the RunInstances field'
 	with open(fileName) as logFile:
 		log = json.load(logFile)
 		eventsList = log['Records']
@@ -11,8 +13,17 @@ def grabRunInstanceInfo(fileName):
 					print(runInstancesList[x])
 				for y in ["instanceId","imageId","instanceType","privateIpAddress"]:
 					print(runInstancesList["responseElements"]["instancesSet"]["items"][0][y])
-				
-with open('RunInstances.list','r') as fileNames:
-	for a in fileNames:
-		b = a.strip("\n")
-		grabRunInstanceInfo(b)
+
+fileList = []
+for path, dir, fileNames in os.walk('3CloudtrailBucketDir'):
+	'list all json files recursively'
+        for fileName in fileNames:
+                if fileName.endswith(".json"):
+                        file = os.path.join(path,fileName)
+                        fileList.append(file)
+for i in fileList:
+	'same as "grep -r RunInstances *"'
+        with open(i, 'r') as content:
+                for line in content:
+                        if 'RunInstances' in line:
+				grabRunInstanceInfo(i)
