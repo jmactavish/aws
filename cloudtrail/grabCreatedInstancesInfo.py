@@ -15,7 +15,7 @@ def grabRunInstanceInfo(fileName):
 					print(runInstancesList["responseElements"]["instancesSet"]["items"][0][y])
 
 fileList = []
-for path, dir, fileNames in os.walk('3CloudtrailBucketDir'):
+for path, dir, fileNames in os.walk('s3CloudtrailBucketDir'):
 	'list all json files recursively'
         for fileName in fileNames:
                 if fileName.endswith(".json"):
