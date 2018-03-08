@@ -16,13 +16,13 @@ def grabRunInstanceInfo(fileName):
 
 fileList = []
 for path, dir, fileNames in os.walk('s3CloudtrailBucketDir'):
-	'list all json files recursively'
+	# list all json files recursively
         for fileName in fileNames:
                 if fileName.endswith(".json"):
                         file = os.path.join(path,fileName)
                         fileList.append(file)
 for i in fileList:
-	'same as "grep -r RunInstances *"'
+	# same as "grep -r RunInstances *"
         with open(i, 'r') as content:
                 for line in content:
                         if 'RunInstances' in line:
