@@ -13,11 +13,15 @@ def grabRunInstanceInfo(fileName):
                 for i in range(len(eventsList)):
                         if eventsList[i]['eventName'] == 'RunInstances':
                                 runInstancesList = eventsList[i]
+                                items = runInstancesList["responseElements"]["instancesSet"]["items"][0]
                                 disks = runInstancesList['requestParameters']['blockDeviceMapping']['items']
+                                if "tagSet" in items:
+                                        print(items["tagSet"]["items"][0]["value"])
                                 for x in ["eventTime","eventName"]:
                                         print(runInstancesList[x])
-                                for y in ["instanceId","imageId","instanceType","privateIpAddress"]:
-                                        print(runInstancesList["responseElements"]["instancesSet"]["items"][0][y])
+                                for y in ["instanceId","imageId","instanceType","privateIpAddress","platform"]:
+                                        if "platform" in items:
+                                                print(items[y])
                                 for z in range(len(disks)):
                                         print(disks[z]['deviceName'])
                                         if 'ebs' in disks[z].keys():
