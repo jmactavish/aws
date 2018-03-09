@@ -21,7 +21,8 @@ def grabRunInstanceInfo(fileName):
                                 for z in range(len(disks)):
                                         print(disks[z]['deviceName'])
                                         if 'ebs' in disks[z].keys():
-                                                print(disks[z]['ebs']['volumeSize'])
+                                                for a in ['volumeType','volumeSize']:
+                                                        print(disks[z]['ebs'][a])
 
 fileList = []
 for path, dir, fileNames in os.walk('s3CloudtrailBucketDir'):
@@ -38,3 +39,4 @@ for i in fileList:
                                 print(i)
                                 grabRunInstanceInfo(i)
                                 print("\n")
+
