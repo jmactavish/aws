@@ -1,3 +1,7 @@
+#!/user/bin/env python
+
+intro = 'this script could recursively look for the [date, instanceId, specifications, IP, disk]  of created instances from gunzipped cloudtrail logs'
+
 import json
 import os
 
@@ -20,7 +24,7 @@ def grabRunInstanceInfo(fileName):
                                                 print(disks[z]['ebs']['volumeSize'])
 
 fileList = []
-for path, dir, fileNames in os.walk('s3CloudtrailBucket'):
+for path, dir, fileNames in os.walk('s3CloudtrailBucketDir'):
         # list all json files recursively
         for fileName in fileNames:
                 if fileName.endswith(".json"):
