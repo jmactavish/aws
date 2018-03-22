@@ -28,7 +28,7 @@ def grabRunInstanceInfo(fileName):
                                                 for a in ['volumeType','volumeSize']:
                                                         print(disks[z]['ebs'][a])
 
-s3CloudtrailBucketDir = '<put your path of logs here>'
+s3CloudtrailBucketDir = raw_input('paste your path of logs here: ')
 fileList = []
 for path, dir, fileNames in os.walk(s3CloudtrailBucketDir):
         # list all json files recursively
