@@ -21,8 +21,8 @@ def grabRunInstanceInfo(fileName):
                                         print(runInstancesList[x])
                                 for y in ["instanceId","imageId","instanceType","privateIpAddress"]:
                                         print(items[y])
-                                        if "platform" in items:
-                                                print(items["platform"])
+                                if "platform" in items:
+                                        print(items["platform"])
                                 for z in range(len(disks)):
                                         print(disks[z]['deviceName'])
                                         if 'ebs' in disks[z].keys():
