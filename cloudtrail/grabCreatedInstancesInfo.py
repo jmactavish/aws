@@ -17,6 +17,10 @@ def grabRunInstanceInfo(fileName):
                                 disks = runInstancesList['requestParameters']['blockDeviceMapping']['items']
                                 if "tagSet" in items:
                                         print(items["tagSet"]["items"][0]["value"])
+                                else:
+                                	# some logs don't have instance tag in the "RunInstance" field since no tag was defined for those instances.
+                                	# need to check their tags from other logs/behavior (just check the dictionary "instanceTags" which was just created)
+                                        print(instanceTags[items["instanceId"]])
                                 for x in ["eventTime","eventName"]:
                                         print(runInstancesList[x])
                                 for y in ["instanceId","imageId","instanceType","privateIpAddress"]:
@@ -30,15 +34,28 @@ def grabRunInstanceInfo(fileName):
                                                         print(disks[z]['ebs'][a])
 
 s3CloudtrailBucketDir = raw_input('paste your path of logs here: ')
+
+# list all json files recursively
 fileList = []
 for path, dir, fileNames in os.walk(s3CloudtrailBucketDir):
-        # list all json files recursively
         for fileName in fileNames:
                 if fileName.endswith(".json"):
                         file = os.path.join(path,fileName)
                         fileList.append(file)
+
+# get server names from all logs and store them(values) in a dictionary with instance IDs(keys)
+instanceTags = {}
+for a in fileList:
+        with open(a, 'r') as LogFile:
+                Log = json.load(LogFile)
+                EventsList = Log['Records']
+                for b in range(len(EventsList)):
+                        if EventsList[b]['eventName'] == 'CreateTags':
+                                InstanceId = EventsList[b]['requestParameters']['resourcesSet']['items'][0]['resourceId']
+                                instanceTags[InstanceId] = EventsList[b]['requestParameters']['tagSet']['items'][0]['value']
+
+# same as "grep -r RunInstances *"
 for i in fileList:
-        # same as "grep -r RunInstances *"
         with open(i, 'r') as content:
                 for line in content:
                         if 'RunInstances' in line:
