@@ -34,6 +34,7 @@ def grabRunInstanceInfo(fileName):
                                                         print(disks[z]['ebs'][a])
 
 s3CloudtrailBucketDir = raw_input('paste your path of logs here: ')
+print("\n")
 
 # list all json files recursively
 fileList = []
