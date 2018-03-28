@@ -41,7 +41,7 @@ def grabRunInstanceInfo(fileName):
 					print('termination not recorded in this directory yet')
 					print('#########################################################')
 
-s3CloudtrailBucketDir = '.'
+s3CloudtrailBucketDir = raw_input('paste your path of logs here: ')
 print("\n")
 
 # list all json files recursively
