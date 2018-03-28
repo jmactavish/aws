@@ -32,8 +32,16 @@ def grabRunInstanceInfo(fileName):
                                         if 'ebs' in disks[z].keys():
                                                 for a in ['volumeType','volumeSize']:
                                                         print(disks[z]['ebs'][a])
+				print("terminate time: ")
+				if items["instanceId"] in terminateFile:
+					print(terminateTime[items["instanceId"]])
+					print(terminateFile[items["instanceId"]])
+					print('#########################################################')
+				else:
+					print('termination not recorded in this directory yet')
+					print('#########################################################')
 
-s3CloudtrailBucketDir = raw_input('paste your path of logs here: ')
+s3CloudtrailBucketDir = '.'
 print("\n")
 
 # list all json files recursively
@@ -43,6 +51,19 @@ for path, dir, fileNames in os.walk(s3CloudtrailBucketDir):
                 if fileName.endswith(".json"):
                         file = os.path.join(path,fileName)
                         fileList.append(file)
+
+# find when the servers were terminated
+terminateFile = {}
+terminateTime = {}
+for m in fileList:
+	with open(m, 'r') as Logfile:
+		LOG = json.load(Logfile)
+		Eventslist = LOG['Records']	
+                for n in range(len(Eventslist)):
+                        if Eventslist[n]['eventName'] == 'TerminateInstances':
+                                terminateInstancesList = Eventslist[n]
+                                terminateFile[terminateInstancesList['requestParameters']['instancesSet']['items'][0]['instanceId']] = m
+                                terminateTime[terminateInstancesList['requestParameters']['instancesSet']['items'][0]['instanceId']] = terminateInstancesList['eventTime']
 
 # get server names from all logs and store them(values) in a dictionary with instance IDs(keys)
 instanceTags = {}
